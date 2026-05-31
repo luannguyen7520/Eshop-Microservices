@@ -1,5 +1,3 @@
-using FluentValidation;
-
 namespace Basket.API.Basket.StoreBasket;
 
 public record StoreBasketCommand(ShoppingCart Card)
@@ -15,11 +13,13 @@ public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
     }
 }
 
-public class StoreBasketCommandHandler
+public class StoreBasketCommandHandler(IBasketRepository repository)
     : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
-    public async Task<StoreBasketResult> Handle(StoreBasketCommand request, CancellationToken cancellationToken)
+    public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
-        return new StoreBasketResult("CongLuan");
+        var result = await repository.StoreBasket(command.Card, cancellationToken);
+
+        return new StoreBasketResult(result.UserName);
     }
 }
