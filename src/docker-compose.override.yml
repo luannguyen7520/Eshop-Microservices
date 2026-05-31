@@ -9,6 +9,16 @@ services:
     ports:
       - "5432:5432"
 
+  basketdb:
+    container_name: basketdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=BasketDb
+    restart: always
+    ports:
+      - "5433:5432"
+
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development

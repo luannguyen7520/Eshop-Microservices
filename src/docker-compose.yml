@@ -3,6 +3,10 @@ services:
     image: postgres
     shm_size: 128mb
 
+  basketdb:
+    image: postgres
+    shm_size: 128mb
+
   catalog.api:
     image: ${DOCKER_REGISTRY-}catalogapi
     build:
