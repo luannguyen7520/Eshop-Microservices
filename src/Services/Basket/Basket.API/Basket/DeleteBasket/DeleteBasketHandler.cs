@@ -2,7 +2,7 @@ namespace Basket.API.Basket.DeleteBasket;
 
 public record DeleteBasketCommand(string UserName)
     : ICommand<DeleteBasketResult>;
-public record DeleteBasketResult(ShoppingCart Cart);
+public record DeleteBasketResult(bool IsSuccess);
 
 
 public class DeleteBasketHandler
@@ -10,6 +10,6 @@ public class DeleteBasketHandler
 {
     public async Task<DeleteBasketResult> Handle(DeleteBasketCommand request, CancellationToken cancellationToken)
     {
-        return new DeleteBasketResult(new ShoppingCart(request.UserName));
+        return new DeleteBasketResult(true);
     }
 }
