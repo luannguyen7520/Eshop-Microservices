@@ -1,5 +1,5 @@
-using Basket.API.Data;
 using BuildingBlocks.Behaviors;
+using BuildingBlocks.Exceptions.Handler;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +21,7 @@ builder.Services.AddMarten(options =>
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 builder.Services.AddOpenApi();
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
 
@@ -35,6 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Configure the HTTP request pipeline.
+app.UseExceptionHandler(options => { });
 
 app.UseHttpsRedirection();
 
