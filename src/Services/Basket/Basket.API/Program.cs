@@ -1,3 +1,4 @@
+using Basket.API.Data;
 using BuildingBlocks.Behaviors;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,13 @@ builder.Services.AddMediatR(options =>
     options.AddOpenBehavior(typeof(ValidationBehavior<,>));
     options.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
+builder.Services.AddMarten(options =>
+{
+    options.Connection(builder.Configuration.GetConnectionString("Database")!);
+    options.Schema.For<ShoppingCart>().Identity(s => s.UserName);
+}).UseLightweightSessions();
+
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 builder.Services.AddOpenApi();
 
