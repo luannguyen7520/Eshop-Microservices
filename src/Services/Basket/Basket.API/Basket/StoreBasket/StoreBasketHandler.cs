@@ -1,6 +1,6 @@
 namespace Basket.API.Basket.StoreBasket;
 
-public record StoreBasketCommand(ShoppingCart Card)
+public record StoreBasketCommand(ShoppingCart Cart)
     : ICommand<StoreBasketResult>;
 public record StoreBasketResult(string UserName);
 
@@ -8,8 +8,8 @@ public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
 {
     public StoreBasketCommandValidator()
     {
-        RuleFor(x => x.Card).NotNull().WithMessage("Cart can not be null");
-        RuleFor(x => x.Card.UserName).NotEmpty().WithMessage("UserName is required");
+        RuleFor(x => x.Cart).NotNull().WithMessage("Cart can not be null");
+        RuleFor(x => x.Cart.UserName).NotEmpty().WithMessage("UserName is required");
     }
 }
 
@@ -18,7 +18,7 @@ public class StoreBasketCommandHandler(IBasketRepository repository)
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
-        var result = await repository.StoreBasket(command.Card, cancellationToken);
+        var result = await repository.StoreBasket(command.Cart, cancellationToken);
 
         return new StoreBasketResult(result.UserName);
     }

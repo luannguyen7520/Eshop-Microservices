@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.API.Basket;
 
-public record DeleteBasketResponse(ShoppingCart Cart);
+public record DeleteBasketResponse(bool IsSuccess);
 
 public partial class BasketController
 {
