@@ -24,6 +24,6 @@ services:
 
   discount.grpc:
     image: ${DOCKER_REGISTRY-}discountgrpc
-    build: 
+    build:
       context: .
       dockerfile: Services/Discount/Discount.Grpc/Dockerfile
