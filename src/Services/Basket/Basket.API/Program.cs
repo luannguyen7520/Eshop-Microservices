@@ -1,12 +1,12 @@
 using BuildingBlocks.Behaviors;
 using BuildingBlocks.Exceptions.Handler;
+using Discount.Grpc;
 using HealthChecks.UI.Client;
-using JasperFx.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+#region Application Services
 builder.Services.AddControllers();
 builder.Services.AddMediatR(options =>
 {
@@ -14,6 +14,9 @@ builder.Services.AddMediatR(options =>
     options.AddOpenBehavior(typeof(ValidationBehavior<,>));
     options.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
+#endregion
+
+#region Database Services
 builder.Services.AddMarten(options =>
 {
     options.Connection(builder.Configuration.GetConnectionString("Database")!);
@@ -27,13 +30,22 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
+#endregion
 
+#region Grpc Services
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
+{
+   options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!); 
+});
+#endregion
+
+#region Cross-Cutting Services
 builder.Services.AddOpenApi();
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
     .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
-
+#endregion
 
 var app = builder.Build();
 
